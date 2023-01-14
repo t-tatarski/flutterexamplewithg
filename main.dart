@@ -43,6 +43,13 @@ class MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
+  void clearLast(){
+    if(favorites.length>0){
+      favorites.removeLast();
+      notifyListeners();
+    }
+
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -80,7 +87,32 @@ class MyHomePage extends StatelessWidget {
                       appState.getNext();
                     },
                     child: Text('next')),
+                ElevatedButton(
+                    onPressed: () {
+                      appState.clearLast();
+                    },
+                    child: Text('clear')),
               ],
+            ),
+            Container(
+              child: Column(
+                children: [
+                  ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      Padding(padding:  EdgeInsets.all(15),
+                       child: Text('you have  ${appState.favorites.length} favorites'),
+                      ),
+                      for (var pair in appState.favorites)
+                        ListTile(
+                          leading: Icon(Icons.favorite_border),
+                          title: Text(pair.asLowerCase),
+                        )
+                    ],
+                  )
+                ],
+              ),
             )
           ],
         ),
